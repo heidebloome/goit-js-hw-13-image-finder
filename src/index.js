@@ -14,16 +14,22 @@ let searchQuery = '';
 function fetchPictures(e) {
   e.preventDefault();
   searchQuery = refs.input.value.trim();
+  if (!searchQuery) return;
+  refs.list.innerHTML = '';
   fetchImages(searchQuery, pageNumber).then(data => {
     createMarkUp(data);
+    if (data.hits.length < 12) return;
+    refs.moreButton.classList.remove('is-hidden');
   });
-  refs.moreButton.classList.remove('is-hidden');
   pageNumber += 1;
 }
 
 function onBtnClick() {
   fetchImages(searchQuery, pageNumber).then(data => {
     createMarkUp(data);
+    if (data.hits.length < 12) {
+      refs.moreButton.classList.add('is-hidden');
+    }
   });
   pageNumber += 1;
   refs.moreButton.scrollIntoView({
