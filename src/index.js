@@ -16,6 +16,7 @@ function fetchPictures(e) {
   searchQuery = refs.input.value.trim();
   if (!searchQuery) return;
   refs.list.innerHTML = '';
+  refs.moreButton.classList.add('is-hidden');
   fetchImages(searchQuery, pageNumber).then(data => {
     createMarkUp(data);
     if (data.hits.length < 12) return;
