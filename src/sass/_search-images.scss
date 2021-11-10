@@ -11,6 +11,7 @@ body {
   background-image: url('../images/keyboard-932370_1920.jpg');
   background-size: cover;
   background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 // RESET
@@ -48,6 +49,7 @@ ol {
 // SEARCH FORM
 
 .search-form {
+  position: relative;
   display: flex;
   margin-left: auto;
   margin-right: auto;
@@ -57,12 +59,6 @@ ol {
   @include for-size(tablet) {
     width: 500px;
   }
-}
-
-.wrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
 }
 
 .input {
@@ -129,7 +125,7 @@ ol {
   }
 }
 
-.more-button {
+.load-more-button {
   display: flex;
   align-items: center;
   margin-left: auto;

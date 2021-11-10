@@ -1,4 +1,4 @@
-export default class FetchImages {
+export default class PicturesService {
   constructor() {
     this.pageNumber = 1;
     this.searchQuery = '';

@@ -3,5 +3,5 @@ import pictureTemplate from '../templates/picture.hbs';
 
 export default function createMarkUp(array) {
   const markUp = array.map(pictureTemplate).join('');
-  refs.list.insertAdjacentHTML('beforeend', markUp);
+  refs.galleryEl.insertAdjacentHTML('beforeend', markUp);
 }
