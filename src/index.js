@@ -1,40 +1,85 @@
 import './sass/main.scss';
 
 import refs from './js/refs';
+import FetchImages from './js/apiService';
 import createMarkUp from './js/create-markup';
-import fetchImages from './js/apiService';
+import '@pnotify/core/dist/BrightTheme.css';
+import { success, info, error } from '@pnotify/core';
+import * as basicLightbox from 'basiclightbox';
 
-refs.form.addEventListener('submit', fetchPictures);
-refs.searchButton.addEventListener('click', fetchPictures);
-refs.moreButton.addEventListener('click', onBtnClick);
+const fetchImages = new FetchImages();
 
-let pageNumber = 1;
-let searchQuery = '';
+refs.form.addEventListener('submit', findPictures);
+refs.searchButton.addEventListener('click', findPictures);
+refs.moreButton.addEventListener('click', onLoadMoreBtnClick);
 
-function fetchPictures(e) {
+function findPictures(e) {
   e.preventDefault();
-  searchQuery = refs.input.value.trim();
-  if (!searchQuery) return;
+
+  const searchQuery = refs.input.value.trim();
+  if (!searchQuery) {
+    const myError = error({
+      text: 'Please enter a valid search query!',
+      sticker: false,
+      icon: false,
+      closer: false,
+      delay: 250,
+      addClass: 'notice',
+    });
+    return;
+  }
+  fetchImages.query = searchQuery;
+
   refs.list.innerHTML = '';
   refs.moreButton.classList.add('is-hidden');
-  fetchImages(searchQuery, pageNumber).then(data => {
+
+  fetchImages.resetPage();
+
+  fetchImages.fetchImages().then(data => {
     createMarkUp(data);
-    if (data.hits.length < 12) return;
-    refs.moreButton.classList.remove('is-hidden');
+    console.log(data);
+
+    if (data.length === 12) {
+      refs.moreButton.classList.remove('is-hidden');
+      return;
+    }
+
+    if (data.length === 0) {
+      const myError2 = error({
+        text: 'Please enter a valid search query!',
+        sticker: false,
+        icon: false,
+        closer: false,
+        delay: 250,
+        addClass: 'notice',
+      });
+      return;
+    }
   });
-  pageNumber += 1;
 }
 
-function onBtnClick() {
-  fetchImages(searchQuery, pageNumber).then(data => {
+function onLoadMoreBtnClick() {
+  fetchImages.fetchImages().then(data => {
     createMarkUp(data);
-    if (data.hits.length < 12) {
+
+    if (data.length < 12) {
       refs.moreButton.classList.add('is-hidden');
     }
   });
-  pageNumber += 1;
-  refs.moreButton.scrollIntoView({
-    behavior: 'smooth',
-    block: 'end',
-  });
+}
+
+refs.list.addEventListener('click', onImgClick);
+
+function onImgClick(e) {
+  e.preventDefault();
+
+  if (e.target === e.currentTarget) return;
+
+  basicLightbox
+    .create(
+      `
+		<img width="1400" height="900" src=${e.target.src}>
+	`,
+    )
+    .show();
 }
