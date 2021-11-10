@@ -68,6 +68,11 @@ function onLoadMoreBtnClick() {
     if (data.length < 12) {
       refs.loadMoreBtnEl.classList.add('is-hidden');
     }
+
+    refs.loadMoreBtnEl.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+    });
   });
 }
 
